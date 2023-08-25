@@ -39,7 +39,6 @@ class GraphicsEngine:
         self.delta_time = 0
         # light
         self.light = Light(position=(3, 3, -3), color=(1, 1, 1))
-        self.light2 = Light(position=(1, 4, -3), color=(1, 0, 1))
         # camera
         self.camera = Camera(self)
         # mesh
