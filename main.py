@@ -24,10 +24,17 @@ class GraphicsEngine:
         icon = pg.image.load('shield.png')
         pg.display.set_icon(icon)
         # opengl context
-        pg.display.set_mode(self.WIN_SIZE, flags=pg.OPENGL | pg.DOUBLEBUF)
+        self.screen_disp = pg.display.set_mode(self.WIN_SIZE, flags=pg.OPENGL | pg.DOUBLEBUF)
         # mouse controls
         pg.event.set_grab(True)
         pg.mouse.set_visible(False)
+        
+        # text rendering
+        self.font = pg.font.Font('fonts//Marlboro.ttf', 32)
+        self.text = self.font.render("test text", True, 'white', 'black')
+        self.textRect = self.text.get_rect()
+        self.textRect.center = (20, 20)
+        
         # detect existing opengl context
         self.ctx = mgl.create_context()
         # uncomment to show inside faces of the cube
@@ -72,6 +79,7 @@ class GraphicsEngine:
     
     def run(self):
         while True:
+            self.screen_disp.blit(self.text, self.textRect)
             self.get_time()
             self.check_events()
             self.camera.update()
