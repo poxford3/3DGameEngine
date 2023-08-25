@@ -79,6 +79,9 @@ class Camera:
         if keys[pg.K_c]:
             self.FOV = 10
             print(self.FOV)
+        if keys[pg.K_z]:
+            self.FOV = 50
+            print(self.FOV)
 
     def get_view_matrix(self):
         # this is where the 3rd person changes will come in, can change the vec3(0) to be a player's location
