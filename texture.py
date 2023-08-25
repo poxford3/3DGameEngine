@@ -1,5 +1,7 @@
+import io
 import pygame as pg
 import moderngl as mgl
+from urllib.request import urlopen
 
 
 class Texture:
@@ -8,6 +10,7 @@ class Texture:
         self.textures = {}
         self.textures[0] = self.get_texture(path=r'textures\grassy_texture.jpg')
         self.textures[1] = self.get_texture(path=r'textures\notfound.png')
+        self.textures[2] = self.get_internet_texture(url="https://play-lh.googleusercontent.com/IeNJWoKYx1waOhfWF6TiuSiWBLfqLb18lmZYXSgsH1fvb8v1IYiZr5aYWe0Gxu-pVZX3")
         self.textures['lego'] = self.get_texture(path=r'objects\legoman\Face_04.png')
         self.textures['skybox'] = self.get_texture_cube(dir_path='textures\\skybox\\', ext='png')
 
@@ -31,6 +34,24 @@ class Texture:
             texture_cube.write(face=i, data=texture_data)
         
         return texture_cube
+    
+    def get_internet_texture(self, url):
+        # load images from url
+        img_str = urlopen(url).read()
+        img_file = io.BytesIO(img_str)
+
+        texture = pg.image.load(img_file).convert()
+        texture = pg.transform.flip(texture, flip_x=False, flip_y=True)
+        texture = self.ctx.texture(size=texture.get_size(), components=3,
+                                 data=pg.image.tostring(texture, 'RGB'))
+        
+        # mipmaps
+        texture.filter = (mgl.LINEAR_MIPMAP_LINEAR, mgl.LINEAR)
+        texture.build_mipmaps()
+        # AF
+        texture.anisotropic = 32.0
+        return texture
+
 
     def get_texture(self, path):
         texture = pg.image.load(path).convert()

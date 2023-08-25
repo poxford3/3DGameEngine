@@ -3,7 +3,7 @@ import pygame as pg
 
 # FOV = 10 # degrees
 NEAR = 0.1
-FAR = 500 # essentially this is the render distance
+FAR = 1000 # essentially this is the render distance
 # SPEED = 0.02
 SENSITIVITY = 0.04
 
@@ -11,6 +11,8 @@ class Camera:
     def __init__(self, app, position=(0, 0, 4), yaw=-90, pitch=0, SPEED=0.02, FOV=50):
         self.app = app
         self.aspect_ratio = app.WIN_SIZE[0] / app.WIN_SIZE[1]
+        self.half_height = app.WIN_SIZE[1] / 2.0
+        self.half_width = self.half_height * self.aspect_ratio
         self.position = glm.vec3(position)
         self.up = glm.vec3(0, 1, 0)
         self.right = glm.vec3(1, 0, 0)
@@ -50,6 +52,8 @@ class Camera:
         self.update_camera_vectors()
         self.m_view = self.get_view_matrix()
         self.m_proj = self.get_projection_matrix()
+        self.m_id = self.get_ortho_id_matrix()
+        self.m_ortho = self.get_ortho_projection_matrix()
 
     def check_inputs(self):
         for event in pg.event.get():
@@ -77,15 +81,25 @@ class Camera:
         if keys[pg.K_LSHIFT]:
             self.position -= self.up * velocity
         if keys[pg.K_c]:
-            self.FOV = 10
+            self.FOV = 10 # TODO this isn't working :/
+            print(self.FOV)
+        if keys[pg.K_z]:
+            self.FOV = 50
             print(self.FOV)
 
     def get_view_matrix(self):
-        # this is where the 3rd person changes will come in, can change the vec3(0) to be a player's location
         return glm.lookAt(self.position, self.position + self.forward, self.up)
 
     def get_projection_matrix(self):
         return glm.perspective(glm.radians(self.FOV), self.aspect_ratio, NEAR, FAR)
     
+    def get_ortho_id_matrix(self):
+        return glm.mat4(1.0) # orthographic projection uses identity matrix for view
+    
     def get_ortho_projection_matrix(self):
-        return glm.ortho(0, 0, 1, 1, 1, 10)
+        return glm.ortho(-self.half_width,
+                         self.half_width,
+                         -self.half_height,
+                         self.half_height,
+                         NEAR,
+                         FAR)

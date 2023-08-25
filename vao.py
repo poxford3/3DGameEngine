@@ -18,6 +18,11 @@ class VAO:
         self.vaos['lego'] = self.get_vao(
             program=self.program.programs['default'],
             vbo=self.vbo.vbos['lego'])
+        
+        # 2d vao
+        self.vaos['2d'] = self.get_vao(
+            program=self.program.programs['2d'],
+            vbo=self.vbo.vbos['2d'])
 
         # skybox vao
         self.vaos['skybox'] = self.get_vao(

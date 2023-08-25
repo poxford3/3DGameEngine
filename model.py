@@ -34,9 +34,22 @@ class BaseModel:
         self.vao.render()
 
 
-class ExtendedBaseModel(BaseModel):
+class Extended2DModel(BaseModel):
     def __init__(self, app, vao_name, tex_id, pos, rot, scale):
         super().__init__(app, vao_name, tex_id, pos, rot, scale)
+        self.on_init()
+
+    def update(self):
+        self.program['m_model'].write(self.m_model)
+        self.program['m_view'].write(self.camera.m_id)
+
+    def on_init(self):
+        self.program['m_model'].write(self.m_model)
+        self.program['m_view'].write(self.camera.m_id)
+
+class ExtendedBaseModel(BaseModel):
+    def __init__(self, app, vao_name, pos, rot, scale):
+        super().__init__(app, vao_name, pos, rot, scale)
         self.on_init()
 
     def update(self):

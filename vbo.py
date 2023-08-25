@@ -8,6 +8,7 @@ class VBO:
         self.vbos = {}
         self.vbos['cube'] = CubeVBO(ctx)
         self.vbos['lego'] = LegoVBO(ctx)
+        self.vbos['2d'] = A_2DVBO(ctx)
         self.vbos['skybox'] = SkyBoxVBO(ctx)
         self.vbos['advanced_skybox'] = AdvancedSkyBoxVBO(ctx)
     
@@ -90,6 +91,21 @@ class LegoVBO(BaseVBO):
         vertex_data = obj.vertices
         vertex_data = np.array(vertex_data, dtype='f4')
         return vertex_data
+    
+class A_2DVBO(BaseVBO):
+    def __init__(self, app):
+        super().__init__(app)
+        self.format = ['2f']
+        self.attribs = ['in_position']
+
+    def get_vertex_data(self):
+        crosshair = np.array([
+            -0.02, 0,
+            0.02, 0,
+            0, -0.02,
+            0, 0.02
+        ], dtype='f4')
+        return crosshair
     
 class SkyBoxVBO(BaseVBO):
     def __init__(self, ctx):

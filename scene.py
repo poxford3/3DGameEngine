@@ -26,6 +26,7 @@ class Scene:
         #         add(Cube(app, pos=(x, -s, z)))
 
         add(Cube(app, pos=(0, -1, 0), scale=(30, .1, 30)))
+        add(Cube(app, tex_id=2, pos=(1, 1, 1), scale=(2, 2, 2)))
 
         add(Lego(app, pos=(0, -1, -10), scale=(0.1, 0.1, 0.1)))
 
